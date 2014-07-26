@@ -1,0 +1,14 @@
+[{
+  "modid": "forestryliquids",
+  "name": "Forestry Liquids",
+  "description": "Adds block versions to forestry fluids.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["EphysPotato"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}]
