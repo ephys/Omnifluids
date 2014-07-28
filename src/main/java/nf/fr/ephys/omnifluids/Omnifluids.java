@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = Omnifluids.MODID, version = Omnifluids.VERSION, name = Omnifluids.NAME, dependencies = "after:*")
 public class Omnifluids {
     public static final String MODID = "omnifluids";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.1.0";
 	public static final String NAME = "Omnifluids";
 
 	@Mod.Instance(MODID)
