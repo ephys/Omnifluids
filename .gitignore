@@ -1,6 +1,7 @@
 .gradle/
 gradle/
 eclipse/
+libs/
 
 CREDITS-fml.txt
 forge*

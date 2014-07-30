@@ -3,14 +3,16 @@ package nf.fr.ephys.omnifluids.common.core;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import nf.fr.ephys.cookiecore.helpers.BlockHelper;
+import nf.fr.ephys.cookiecore.helpers.FluidHelper;
 import nf.fr.ephys.omnifluids.common.block.FluidBlock;
-import nf.fr.ephys.omnifluids.helper.BlockHelper;
 
 public class EventHandler {
 	@SubscribeEvent
@@ -44,16 +46,34 @@ public class EventHandler {
 
 			if (fluid == null || !(fluid.getFluid().getBlock() instanceof FluidBlock)) return;
 
-			if (!BlockHelper.placeFluidInWorld(event.entityPlayer, BlockHelper.getAdjacentBlock(event.x, event.y, event.z, event.face), BlockHelper.getOppositeSide(event.face), stack, event.world, fluid)) return;
+			// deny block use as we're calling it now
+			if (event.world.getBlock(event.x, event.y, event.z).onBlockActivated(event.world, event.x, event.y, event.z, event.entityPlayer, event.face, 0, 0, 0)) {
+				event.useBlock = Event.Result.DENY;
+
+				return;
+			}
+
+			if (!FluidHelper.playerPlaceFluid(event.entityPlayer, BlockHelper.getAdjacentBlock(event.x, event.y, event.z, event.face), BlockHelper.getOppositeSide(event.face), stack, event.world, fluid)) {
+				return;
+			}
 
 			ItemStack bucket = new ItemStack(Items.bucket);
 
-			stack.stackSize--;
-			if (!event.entityPlayer.inventory.addItemStackToInventory(bucket)) {
-				event.entityPlayer.dropPlayerItemWithRandomChoice(bucket, false);
+			if (stack.stackSize == 1) {
+				event.entityPlayer.setCurrentItemOrArmor(0, bucket);
+
+				stack.stackSize = 0;
+			} else {
+				stack.stackSize--;
+
+				if(!event.entityPlayer.inventory.addItemStackToInventory(bucket)) {
+					event.entityPlayer.dropPlayerItemWithRandomChoice(bucket, false);
+				}
 			}
 
-			event.entityPlayer.inventory.markDirty();
+			if (event.entityPlayer instanceof EntityPlayerMP) {
+				((EntityPlayerMP) event.entityPlayer).mcServer.getConfigurationManager().syncPlayerInventory((EntityPlayerMP) event.entityPlayer);
+			}
 		}
 	}
 }

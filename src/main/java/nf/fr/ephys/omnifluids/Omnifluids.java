@@ -9,7 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import nf.fr.ephys.omnifluids.common.core.CommonProxy;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Omnifluids.MODID, version = Omnifluids.VERSION, name = Omnifluids.NAME, dependencies = "after:*")
+@Mod(modid = Omnifluids.MODID, version = Omnifluids.VERSION, name = Omnifluids.NAME, dependencies = "after:*;required-after:cookiecore")
 public class Omnifluids {
     public static final String MODID = "omnifluids";
     public static final String VERSION = "1.1.0";
@@ -34,6 +34,7 @@ public class Omnifluids {
 	@EventHandler
     public void init(FMLInitializationEvent event) {
 		proxy.init(event);
+
     }
 
 	@EventHandler
