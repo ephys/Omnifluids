@@ -1,17 +1,13 @@
 package nf.fr.ephys.omnifluids.common.registry;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBucket;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import nf.fr.ephys.omnifluids.Omnifluids;
 import nf.fr.ephys.omnifluids.common.ItemFluidBlock;
 import nf.fr.ephys.omnifluids.common.block.FluidBlock;
-import nf.fr.ephys.omnifluids.common.compatibility.FluidEffectMead;
-import nf.fr.ephys.omnifluids.common.compatibility.FluidEffectMilk;
+import nf.fr.ephys.omnifluids.common.compatibility.*;
 
 import java.util.Map;
 
@@ -23,21 +19,17 @@ public class FluidBlockRegistry {
 			Fluid fluid = entry.getValue();
 
 			if (!fluid.canBePlacedInWorld()) {
-				Omnifluids.getLogger().info("Fluid " + fluid.getUnlocalizedName() + " has no block version, adding one");
+				Omnifluids.getLogger().info("Fluid " + fluid.getName() + " has no block version, adding one");
+
+				if (FluidRegistry.getFluid(fluid.getName()) == null) {
+					System.out.println(fluid.getName() + " IS REGISTERED BUT NOT FOUND");
+				}
 
 				fixFluids(fluid);
 
 				FluidBlock block = new FluidBlock(fluid, fluid.getTemperature() > 1000 ? Material.lava : Material.water);
 
 				GameRegistry.registerBlock(block, ItemFluidBlock.class, fluid.getUnlocalizedName());
-			}
-		}
-	}
-
-	public static void scanBuckets() {
-		for (Object o : Item.itemRegistry) {
-			if (o instanceof Item) {
-				System.out.println(o + ((Item) o).getUnlocalizedName());
 			}
 		}
 	}
@@ -55,51 +47,51 @@ public class FluidBlockRegistry {
 		} else if (fluid.getName().equals("seedoil")) {
 			fluid.setDensity(1200);
 			fluid.setViscosity(800);
+		} else if (fluid.getName().equals("liquidnitrogen")) {
+			fluid.setDensity(-1);
+			fluid.setTemperature(63);
 		}
 	}
 
+//fluid.binnie.mashGrain                          => slowness 1   15s
+	// binnie.mashRye binnie.mashCorn
 	public static void addFluidActions() {
-		if (Loader.isModLoaded("Forestry")) {
-			compatForestry();
-		}
-
-		compatVanilla();
-	}
-
-	private static void compatForestry() {
-		Omnifluids.getLogger().info("Forestry compatibility in progress");
-
-		/* fluid.biomass, fluid.juice */
-
-		Fluid mead = FluidRegistry.getFluid("short.mead");
-		if (mead == null)
-			mead = FluidRegistry.getFluid("mead");
-
-		if (mead != null && mead.getBlock() instanceof FluidBlock) {
-			Omnifluids.getLogger().info("Added special effect to short mead fluid");
-			((FluidBlock) mead.getBlock()).setFluidAction(new FluidEffectMead());
-		} else {
-			Omnifluids.getLogger().info("Skipping short mead effect: block is not from us");
-		}
-
-		Fluid ethanol = FluidRegistry.getFluid("short.bioethanol");
-
-		if (ethanol != null && ethanol.getBlock() instanceof FluidBlock) {
-			Omnifluids.getLogger().info("Added special effect to short mead fluid");
-			((FluidBlock) ethanol.getBlock()).setFluidAction(new FluidEffectMead());
-		} else {
-			Omnifluids.getLogger().info("Skipping short mead effect: block is not from us");
-		}
-	}
-
-	private static void compatVanilla() {
-		Omnifluids.getLogger().info("Vanilla compatibility in progress");
+		Omnifluids.getLogger().info("Adding custom fluid effects, this will take a while");
 		Fluid milk = FluidRegistry.getFluid("milk");
 
 		if (milk != null && milk.getBlock() instanceof FluidBlock) {
 			((FluidBlock) milk.getBlock()).setFluidAction(new FluidEffectMilk());
-			Omnifluids.getLogger().info("Added special effect to milk fluid");
-		} else
-			Omnifluids.getLogger().info("Skipping milk effect: block is not from us");
+		}
+
+		FluidEffectHealthBoost.addEffect(new String[] {"binnie.dna.raw"});
+
+		FluidEffectAlcool.addEffect(new String[] {"short.mead",
+				"binnie.beertout", "binnie.wineed", "binnie.brandylum", "binnie.liquorruit", "binnie.beerorn", "binnie.liqueuroffee",
+				"binnie.winelderberry", "binnie.brandypple", "binnie.liqueuremon", "binnie.liqueurazelnut",
+				"binnie.liquorpple", "binnie.winehite", "binnie.spiritin", "binnie.brandyherry", "binnie.whiskey",
+				"binnie.rumhite", "binnie.rumark", "binnie.liqueurerbal", "binnie.beerheat", "binnie.liquorlderberry",
+				"binnie.liqueurinnamon", "binnie.ciderear", "binnie.ciderpple", "binnie.vodka", "binnie.liqueurint",
+				"binnie.wineineapple", "binnie.liqueurlmond", "binnie.winelum", "binnie.liqueureach", "binnie.whiskeyheat",
+				"binnie.brandypricot", "binnie.liqueurelon", "binnie.wineitrus", "binnie.liquorear", "binnie.liqueuraspberry",
+				"binnie.liqueurlackberry", "binnie.liqueurherry", "binnie.mashheat", "binnie.wineanana", "binnie.winepricot",
+				"binnie.liqueuranana", "binnie.brandyrape", "binnie.liqueurhocolate", "binnie.whiskeyye", "binnie.wineranberry",
+				"binnie.whiskeyorn", "binnie.brandylderberry", "binnie.liqueurnise", "binnie.wineherry", "binnie.brandyruit",
+				"binnie.tequila", "binnie.liquorherry", "binnie.cidereach", "binnie.spiritugarcane", "binnie.winearrot",
+				"binnie.wineomato", "binnie.winegave", "binnie.brandyear", "binnie.wineparkling", "binnie.liquorpricot",
+				"binnie.beerager", "binnie.beerrye", "binnie.winefortified", "binnie.beerale", "binnie.brandycitrus",
+				"binnie.liqueurorange", "binnie.liqueurblackcurrant"
+		});
+
+		FluidEffectBiofuel.addEffect(new String[] {"biomass", "bioethanol"});
+
+		FluidEffectCold.addEffect(new String[] {"liquidnitrogen", "ice"});
+
+		FluidEffectPoison.addEffect(new String[] {"turpentine", "binnie.bacteriaVector", "binnie.bacteriaPoly", "binnie.bacteria"});
+
+		FluidEffectJump.addEffect(new String[] {"latex"});
+
+		FluidEffectAcid.addEffect(new String[] {"acid"});
+
+		Omnifluids.getLogger().info("Fluid effects added !");
 	}
 }

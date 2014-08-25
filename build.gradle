@@ -1,3 +1,12 @@
+ext {
+    _of_minecraft_version = "1.7.10"
+    _of_forge_version = "10.13.0.1205"
+
+    _of_omnifluids_version = "1.2.0"
+
+    _ts_cookie_version = "1.2.0"
+}
+
 buildscript {
     repositories {
         mavenCentral()
@@ -15,24 +24,27 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-compileJava {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+repositories {
+    mavenLocal()
 }
 
 apply plugin: 'forge'
 
-version = "1.1.0"
-group= "nf.fr.ephys.omnifluids" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "nf.fr.ephys.omnifluids" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "${_of_minecraft_version}-${_of_omnifluids_version}" // http://semver.org/
 archivesBaseName = "omnifluids"
 
+sourceCompatibility = 7
+targetCompatibility = 7
+
 minecraft {
-    version = "1.7.10-10.13.0.1188"
+    version = "${_of_minecraft_version}-${_of_forge_version}"
     assetDir = "eclipse/assets"
 }
 
-dependencies {}
+dependencies {
+    compile "nf.fr.ephys.cookiecore:cookiecore:${_ts_cookie_version}"
+}
 
 processResources {
     // this will ensure that this task is redone when the versions change.

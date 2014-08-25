@@ -3,26 +3,25 @@ package nf.fr.ephys.omnifluids.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import nf.fr.ephys.omnifluids.api.IFluidAction;
 
 import java.util.Random;
 
 public class FluidBlock extends BlockFluidClassic {
-	private String unlocalizedName;
 	private IFluidAction action;
-	private Fluid fluid;
+	private FluidStack fluid;
 
 	public FluidBlock(Fluid fluid, Material material) {
 		super(fluid, material);
 
-		this.fluid = fluid;
+		this.fluid = new FluidStack(fluid, FluidContainerRegistry.BUCKET_VOLUME);
 
-
-		this.unlocalizedName = fluid.getUnlocalizedName();
 		this.setBlockName(fluid.getUnlocalizedName());
 	}
 
@@ -46,20 +45,37 @@ public class FluidBlock extends BlockFluidClassic {
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		IIcon icon = side <= 1? fluid.getStillIcon() : fluid.getFlowingIcon();
+		Fluid fluid = this.fluid.getFluid();
+		IIcon icon = side <= 1 ? fluid.getStillIcon() : fluid.getFlowingIcon();
 
-		if (icon == null) return fluid.getIcon();
+		if (icon == null)
+			return fluid.getIcon();
 
 		return icon;
 	}
 
 	@Override
 	public String getLocalizedName() {
-		return StatCollector.translateToLocal(getUnlocalizedName());
+		return fluid.getLocalizedName();
 	}
 
 	@Override
 	public String getUnlocalizedName() {
-		return unlocalizedName;
+		return fluid.getUnlocalizedName();
+	}
+
+	@Override
+	public int getBlockColor() {
+		return fluid.getFluid().getColor();
+	}
+
+	@Override
+	public int getRenderColor(int p_149741_1_) {
+		return fluid.getFluid().getColor();
+	}
+
+	@Override
+	public int colorMultiplier(IBlockAccess p_149720_1_, int p_149720_2_, int p_149720_3_, int p_149720_4_) {
+		return fluid.getFluid().getColor();
 	}
 }
