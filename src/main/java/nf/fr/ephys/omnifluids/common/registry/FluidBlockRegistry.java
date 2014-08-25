@@ -18,12 +18,8 @@ public class FluidBlockRegistry {
 		for (Map.Entry<String, Fluid> entry: fluids.entrySet()) {
 			Fluid fluid = entry.getValue();
 
-			if (!fluid.canBePlacedInWorld()) {
+			if (!fluid.canBePlacedInWorld() && !Omnifluids.FLUID_BLACKLIST.contains(fluid.getName())) {
 				Omnifluids.getLogger().info("Fluid " + fluid.getName() + " has no block version, adding one");
-
-				if (FluidRegistry.getFluid(fluid.getName()) == null) {
-					System.out.println(fluid.getName() + " IS REGISTERED BUT NOT FOUND");
-				}
 
 				fixFluids(fluid);
 
@@ -56,7 +52,7 @@ public class FluidBlockRegistry {
 //fluid.binnie.mashGrain                          => slowness 1   15s
 	// binnie.mashRye binnie.mashCorn
 	public static void addFluidActions() {
-		Omnifluids.getLogger().info("Adding custom fluid effects, this will take a while");
+		Omnifluids.getLogger().info("Adding custom fluid effects to our blocks");
 		Fluid milk = FluidRegistry.getFluid("milk");
 
 		if (milk != null && milk.getBlock() instanceof FluidBlock) {
@@ -66,19 +62,19 @@ public class FluidBlockRegistry {
 		FluidEffectHealthBoost.addEffect(new String[] {"binnie.dna.raw"});
 
 		FluidEffectAlcool.addEffect(new String[] {"short.mead",
-				"binnie.beertout", "binnie.wineed", "binnie.brandylum", "binnie.liquorruit", "binnie.beerorn", "binnie.liqueuroffee",
-				"binnie.winelderberry", "binnie.brandypple", "binnie.liqueuremon", "binnie.liqueurazelnut",
-				"binnie.liquorpple", "binnie.winehite", "binnie.spiritin", "binnie.brandyherry", "binnie.whiskey",
-				"binnie.rumhite", "binnie.rumark", "binnie.liqueurerbal", "binnie.beerheat", "binnie.liquorlderberry",
-				"binnie.liqueurinnamon", "binnie.ciderear", "binnie.ciderpple", "binnie.vodka", "binnie.liqueurint",
-				"binnie.wineineapple", "binnie.liqueurlmond", "binnie.winelum", "binnie.liqueureach", "binnie.whiskeyheat",
-				"binnie.brandypricot", "binnie.liqueurelon", "binnie.wineitrus", "binnie.liquorear", "binnie.liqueuraspberry",
-				"binnie.liqueurlackberry", "binnie.liqueurherry", "binnie.mashheat", "binnie.wineanana", "binnie.winepricot",
-				"binnie.liqueuranana", "binnie.brandyrape", "binnie.liqueurhocolate", "binnie.whiskeyye", "binnie.wineranberry",
-				"binnie.whiskeyorn", "binnie.brandylderberry", "binnie.liqueurnise", "binnie.wineherry", "binnie.brandyruit",
-				"binnie.tequila", "binnie.liquorherry", "binnie.cidereach", "binnie.spiritugarcane", "binnie.winearrot",
-				"binnie.wineomato", "binnie.winegave", "binnie.brandyear", "binnie.wineparkling", "binnie.liquorpricot",
-				"binnie.beerager", "binnie.beerrye", "binnie.winefortified", "binnie.beerale", "binnie.brandycitrus",
+				"binnie.beerstout", "binnie.winered", "binnie.brandyplum", "binnie.liquorfruit", "binnie.beercorn", "binnie.liqueurcoffee",
+				"binnie.wineelderberry", "binnie.brandyapple", "binnie.liqueurlemon", "binnie.liqueurhazelnut",
+				"binnie.liquorapple", "binnie.winewhite", "binnie.spiritgin", "binnie.brandycherry", "binnie.whiskey",
+				"binnie.rumwhite", "binnie.rumdark", "binnie.liqueurherbal", "binnie.beerwheat", "binnie.liquorelderberry",
+				"binnie.liqueurcinnamon", "binnie.ciderpear", "binnie.ciderapple", "binnie.vodka", "binnie.liqueurmint",
+				"binnie.winepineapple", "binnie.liqueuralmond", "binnie.wineplum", "binnie.liqueurpeach", "binnie.whiskeywheat",
+				"binnie.brandyapricot", "binnie.liqueurmelon", "binnie.winecitrus", "binnie.liquorpear", "binnie.liqueurraspberry",
+				"binnie.liqueurblackberry", "binnie.liqueurcherry", "binnie.mashwheat", "binnie.winebanana", "binnie.wineapricot",
+				"binnie.liqueurbanana", "binnie.brandygrape", "binnie.liqueurchocolate", "binnie.whiskeyrye", "binnie.winecranberry",
+				"binnie.whiskeycorn", "binnie.brandyelderberry", "binnie.liqueuranise", "binnie.winecherry", "binnie.brandyfruit",
+				"binnie.tequila", "binnie.liquorcherry", "binnie.ciderpeach", "binnie.spiritsugarcane", "binnie.winecarrot",
+				"binnie.winetomato", "binnie.wineagave", "binnie.brandypear", "binnie.winesparkling", "binnie.liquorapricot",
+				"binnie.beerlager", "binnie.beerrye", "binnie.winefortified", "binnie.beerale", "binnie.brandycitrus",
 				"binnie.liqueurorange", "binnie.liqueurblackcurrant"
 		});
 
