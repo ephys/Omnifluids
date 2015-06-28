@@ -1,5 +1,4 @@
 .gradle/
-gradle/
 eclipse/
 libs/
 
@@ -8,6 +7,4 @@ forge*
 Forge*
 MinecraftForge*
 README.txt
-gradlew
-gradlew.bat
 LICENSE-fml.txt
